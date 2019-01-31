@@ -10,36 +10,76 @@ import UIKit
 
 
 class DocumentsViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
+    var documents = [Document]()
+    let dateFormatter = DateFormatter()
+    
+    @IBOutlet weak var documentsTableView: UITableView!
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return documents.count
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "documentCell", for:indexPath)
+        dateFormatter.dateFormat = "MMMM d, yyyy HH:mm"
+        if let cell = cell as? DocumentsTableViewCell{
+            let document = documents[indexPath.row]
+            cell.fileName.text = document.name
+            cell.fileSize.text = document.size
+            cell.fileDate.text = dateFormatter.string(from: document.dateModified)
+            print("date: \(document.dateModified)")
+        }
+        
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? EditorViewController,
+            let row = documentsTableView.indexPathForSelectedRow?.row {
+            destination.document = documents[row]
+        }
+    }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        let fileManager = FileManager.default
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let path = documentsURL.path
+        
+        do {
+            let files = try fileManager.contentsOfDirectory(atPath: path)
+            
+            for file in files {
+                var documentSize: UInt64
+                var documentDate: Date? = nil
+                let documentPath = path + "/" + file
+                var documentSizeString: String = "0 bytes"
+                
+                do {
+                    let file = try FileManager.default.attributesOfItem(atPath: documentPath)
+                    
+                    documentDate = file[FileAttributeKey.modificationDate] as? Date
+                    documentSize = file[FileAttributeKey.size] as! UInt64
+                    documentSizeString = "\(documentSize) bytes"
+                } catch let error{
+                    print("Failed to retrieve file attributes")
+                    print(error)
+                }
+                documents.append(Document (name: file, size: documentSizeString, dateModified: documentDate!))
+            }
+        } catch let error {
+            print("ERROR")
+            print(error)
+        }
         // Do any additional setup after loading the view.
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+ 
 }

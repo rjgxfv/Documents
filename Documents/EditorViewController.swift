@@ -23,9 +23,11 @@ class EditorViewController: UIViewController {
         super.viewDidLoad()
         
         if(document?.name) != nil{
-            name.text = document!.name
+            var text = document!.name
+            text = text.replacingOccurrences(of: ".txt", with: "", options: NSString.CompareOptions.literal, range: nil)
+            name.text = text
             do{
-                let fileURL = documentsURL.appendingPathComponent(document!.name).appendingPathExtension("txt")
+                let fileURL = documentsURL.appendingPathComponent(document!.name)//.appendingPathExtension("txt")
                 contents.text = try String(contentsOf: fileURL, encoding: String.Encoding.utf8)
             }catch let error as NSError
             {
@@ -53,7 +55,11 @@ class EditorViewController: UIViewController {
                 print("failed to write to URL")
                 print(error)
             }
+            name.text=""
+            contents.text=""
+            
             self.navigationController?.popViewController(animated: true)
+            
         }
         else
         {
@@ -65,5 +71,4 @@ class EditorViewController: UIViewController {
     @IBAction func fileNameChanged(_ sender: Any) {
         navigationBar.title = name.text
     }
-    
 }
