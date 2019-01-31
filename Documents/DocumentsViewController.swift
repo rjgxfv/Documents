@@ -2,13 +2,28 @@
 //  DocumentsViewController.swift
 //  Documents
 //
-//  Created by Robert Graman on 1/30/19.
+//  Created by Robert Graman on 1/31/19.
 //  Copyright © 2019 Robert Graman. All rights reserved.
 //
 
 import UIKit
 
-class DocumentsViewController: UINavigationController {
+
+class DocumentsViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "documentCell", for:indexPath)
+        return cell
+    }
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
