@@ -12,7 +12,8 @@ import UIKit
 class DocumentsViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
     var documents = [Document]()
     let dateFormatter = DateFormatter()
-    
+//    var newFile:Document
+//    var filename: String
     @IBOutlet weak var documentsTableView: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,27 +50,25 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
             
         }
     }
-
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        documents = [Document]()
+    override func viewDidAppear(_ animated: Bool) {
+        print("hello")
+        documents = [Document]()
         let fileManager = FileManager.default
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let path = documentsURL.path
-
+        
         do {
             let files = try fileManager.contentsOfDirectory(atPath: path)
-
+            
             for file in files {
                 var documentSize: UInt64
                 var documentDate: Date? = nil
                 let documentPath = path + "/" + file
                 var documentSizeString: String = "0 bytes"
-
+                
                 do {
                     let file = try FileManager.default.attributesOfItem(atPath: documentPath)
-
+                    
                     documentDate = file[FileAttributeKey.modificationDate] as? Date
                     documentSize = file[FileAttributeKey.size] as! UInt64
                     documentSizeString = "\(documentSize) bytes"
@@ -78,11 +77,47 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
                     print(error)
                 }
                 documents.append(Document (name: file, size: documentSizeString, dateModified: documentDate!))
+                documentsTableView.reloadData()
             }
         } catch let error {
             print("ERROR")
             print(error)
         }
+
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        documents = [Document]()
+//        let fileManager = FileManager.default
+//        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        let path = documentsURL.path
+//
+//        do {
+//            let files = try fileManager.contentsOfDirectory(atPath: path)
+//
+//            for file in files {
+//                var documentSize: UInt64
+//                var documentDate: Date? = nil
+//                let documentPath = path + "/" + file
+//                var documentSizeString: String = "0 bytes"
+//
+//                do {
+//                    let file = try FileManager.default.attributesOfItem(atPath: documentPath)
+//
+//                    documentDate = file[FileAttributeKey.modificationDate] as? Date
+//                    documentSize = file[FileAttributeKey.size] as! UInt64
+//                    documentSizeString = "\(documentSize) bytes"
+//                } catch let error{
+//                    print("Failed to retrieve file attributes")
+//                    print(error)
+//                }
+//                documents.append(Document (name: file, size: documentSizeString, dateModified: documentDate!))
+//            }
+//        } catch let error {
+//            print("ERROR")
+//            print(error)
+//        }
         // Do any additional setup after loading the view.
     }
     

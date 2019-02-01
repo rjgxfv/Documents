@@ -14,7 +14,6 @@ class EditorViewController: UIViewController {
     @IBOutlet weak var contents: UITextView!
     @IBOutlet weak var navigationBar: UINavigationItem!
     var document: Document?
-    var document2:Document?
     
     let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     
@@ -53,8 +52,8 @@ class EditorViewController: UIViewController {
         {
             let fileURL = documentsURL.appendingPathComponent(fileName).appendingPathExtension("txt")
             
-            print("saving file:\(fileName)" )
-            print("file Path: \(fileURL)")
+//            print("saving file:\(fileName)" )
+//            print("file Path: \(fileURL)")
             do{
                 try fileContents.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
             }catch let error as NSError
@@ -62,7 +61,7 @@ class EditorViewController: UIViewController {
                 print("failed to write to URL")
                 print(error)
             }
-            
+            //update array(name)
             self.navigationController?.popViewController(animated: true)
         }
         else
@@ -76,5 +75,12 @@ class EditorViewController: UIViewController {
         navigationBar.title = name.text
     }
     
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let destination = segue.destination as? DocumentsViewController , let newName = name.text
+//        {
+//            destination.filename = newName
+//        }
+//    }
     
 }
