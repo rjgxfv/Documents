@@ -102,7 +102,7 @@
                     <navigationItem key="navigationItem" title="Documents" id="X3a-E1-gZK">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="WU2-dp-VVY">
                             <connections>
-                                <segue destination="JGK-Wd-ETg" kind="show" id="s87-ab-LNL"/>
+                                <segue destination="JGK-Wd-ETg" kind="show" identifier="add" id="s87-ab-LNL"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

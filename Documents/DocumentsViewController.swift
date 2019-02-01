@@ -30,7 +30,6 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
             cell.fileName.text = document.name
             cell.fileSize.text = document.size
             cell.fileDate.text = dateFormatter.string(from: document.dateModified)
-            print("date: \(document.dateModified)")
         }
         
         return cell
@@ -39,31 +38,38 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? EditorViewController,
             let row = documentsTableView.indexPathForSelectedRow?.row {
-            destination.document = documents[row]
+            
+            if (segue.identifier == "add") {
+                destination.document = nil
+            } else {
+                destination.document = documents[row]
+            }
+            destination.document = segue.identifier == "add" ? nil : documents[row]
+            
+            
         }
     }
-    
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
+//        documents = [Document]()
         let fileManager = FileManager.default
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let path = documentsURL.path
-        
+
         do {
             let files = try fileManager.contentsOfDirectory(atPath: path)
-            
+
             for file in files {
                 var documentSize: UInt64
                 var documentDate: Date? = nil
                 let documentPath = path + "/" + file
                 var documentSizeString: String = "0 bytes"
-                
+
                 do {
                     let file = try FileManager.default.attributesOfItem(atPath: documentPath)
-                    
+
                     documentDate = file[FileAttributeKey.modificationDate] as? Date
                     documentSize = file[FileAttributeKey.size] as! UInt64
                     documentSizeString = "\(documentSize) bytes"
@@ -81,5 +87,6 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
     }
     
 
+    
  
 }
