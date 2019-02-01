@@ -12,6 +12,10 @@ import UIKit
 class DocumentsViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
     var documents = [Document]()
     let dateFormatter = DateFormatter()
+    
+    
+    let fileManager = FileManager.default
+    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 //    var newFile:Document
 //    var filename: String
     @IBOutlet weak var documentsTableView: UITableView!
@@ -36,6 +40,29 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
         return cell
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete"){ (action, indexPath) in
+
+            let fileName = self.documents[indexPath.row].name
+            print(fileName)
+            let fileURL = self.documentsURL.appendingPathComponent(fileName)
+            print(fileURL)
+            
+            do{
+                try self.fileManager.removeItem(at: fileURL)
+            }catch{
+                print("Error deleting file: \(error)")
+            }
+            self.documents.remove(at: indexPath.row)
+            self.documentsTableView.deleteRows(at: [indexPath], with: .fade)
+        }
+        return [delete]
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        print("ghjhghj")
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? EditorViewController,
             let row = documentsTableView.indexPathForSelectedRow?.row {
@@ -53,8 +80,8 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
     override func viewDidAppear(_ animated: Bool) {
         print("hello")
         documents = [Document]()
-        let fileManager = FileManager.default
-        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        let fileManager = FileManager.default
+//        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let path = documentsURL.path
         
         do {
@@ -88,37 +115,7 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        documents = [Document]()
-//        let fileManager = FileManager.default
-//        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//        let path = documentsURL.path
-//
-//        do {
-//            let files = try fileManager.contentsOfDirectory(atPath: path)
-//
-//            for file in files {
-//                var documentSize: UInt64
-//                var documentDate: Date? = nil
-//                let documentPath = path + "/" + file
-//                var documentSizeString: String = "0 bytes"
-//
-//                do {
-//                    let file = try FileManager.default.attributesOfItem(atPath: documentPath)
-//
-//                    documentDate = file[FileAttributeKey.modificationDate] as? Date
-//                    documentSize = file[FileAttributeKey.size] as! UInt64
-//                    documentSizeString = "\(documentSize) bytes"
-//                } catch let error{
-//                    print("Failed to retrieve file attributes")
-//                    print(error)
-//                }
-//                documents.append(Document (name: file, size: documentSizeString, dateModified: documentDate!))
-//            }
-//        } catch let error {
-//            print("ERROR")
-//            print(error)
-//        }
-        // Do any additional setup after loading the view.
+
     }
     
 
