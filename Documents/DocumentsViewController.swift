@@ -7,21 +7,17 @@
 //
 
 import UIKit
+import CoreData
 
 
 class DocumentsViewController: UIViewController , UITableViewDataSource, UITableViewDelegate{
-    var documents = [Document]()
+    var documents2 = [Doc]()
     let dateFormatter = DateFormatter()
-    
-    
-    let fileManager = FileManager.default
-    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//    var newFile:Document
-//    var filename: String
+
     @IBOutlet weak var documentsTableView: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return documents.count
+        return documents2.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -31,10 +27,10 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "documentCell", for:indexPath)
         dateFormatter.dateFormat = "MMMM d, yyyy HH:mm"
         if let cell = cell as? DocumentsTableViewCell{
-            let document = documents[indexPath.row]
-            cell.fileName.text = document.name
-            cell.fileSize.text = document.size
-            cell.fileDate.text = dateFormatter.string(from: document.dateModified)
+            let document = documents2[indexPath.row]
+            cell.fileName.text = document.title
+            cell.fileSize.text = document.fileSize
+            cell.fileDate.text = dateFormatter.string(from: document.dateMod! as Date)
         }
         
         return cell
@@ -42,18 +38,20 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .destructive, title: "Delete"){ (action, indexPath) in
-
-            let fileName = self.documents[indexPath.row].name
-            print(fileName)
-            let fileURL = self.documentsURL.appendingPathComponent(fileName)
-            print(fileURL)
-            
-            do{
-                try self.fileManager.removeItem(at: fileURL)
-            }catch{
-                print("Error deleting file: \(error)")
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else{
+                return
             }
-            self.documents.remove(at: indexPath.row)
+            let managedContext = appDelegate.persistentContainer.viewContext
+            let document = self.documents2[indexPath.row]
+            managedContext.delete(document)
+            do{
+                try managedContext.save()
+            }catch{
+                print("Error")
+                self.documentsTableView.reloadData()
+            }
+            
+            self.documents2.remove(at: indexPath.row)
             self.documentsTableView.deleteRows(at: [indexPath], with: .fade)
         }
         return [delete]
@@ -68,57 +66,33 @@ class DocumentsViewController: UIViewController , UITableViewDataSource, UITable
             let row = documentsTableView.indexPathForSelectedRow?.row {
             
             if (segue.identifier == "add") {
-                destination.document = nil
+                destination.document2 = nil
             } else {
-                destination.document = documents[row]
+                destination.document2 = documents2[row]
             }
-            destination.document = segue.identifier == "add" ? nil : documents[row]
+            destination.document2 = segue.identifier == "add" ? nil : documents2[row]
             
             
         }
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        print("hello")
-        documents = [Document]()
-//        let fileManager = FileManager.default
-//        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let path = documentsURL.path
-        
-        do {
-            let files = try fileManager.contentsOfDirectory(atPath: path)
-            
-            for file in files {
-                var documentSize: UInt64
-                var documentDate: Date? = nil
-                let documentPath = path + "/" + file
-                var documentSizeString: String = "0 bytes"
-                
-                do {
-                    let file = try FileManager.default.attributesOfItem(atPath: documentPath)
-                    
-                    documentDate = file[FileAttributeKey.modificationDate] as? Date
-                    documentSize = file[FileAttributeKey.size] as! UInt64
-                    documentSizeString = "\(documentSize) bytes"
-                } catch let error{
-                    print("Failed to retrieve file attributes")
-                    print(error)
-                }
-                documents.append(Document (name: file, size: documentSizeString, dateModified: documentDate!))
-                documentsTableView.reloadData()
-            }
-        } catch let error {
-            print("ERROR")
-            print(error)
-        }
-
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
-    
-
-    
- 
+    override func viewDidAppear(_ animated: Bool) {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else{
+            return
+        }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest:NSFetchRequest<Doc> = Doc.fetchRequest()
+        do{
+            documents2 = try managedContext.fetch(fetchRequest)
+        }
+        catch{
+            print("fetch failed.")
+        }
+        documentsTableView.reloadData()
+        
+    }
 }

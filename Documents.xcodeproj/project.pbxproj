@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF3FC54E221B93E000C4FEB8 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EF3FC54C221B93E000C4FEB8 /* Model.xcdatamodeld */; };
 		EF4C4E4C22023AC200B607C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4C4E4B22023AC200B607C9 /* AppDelegate.swift */; };
 		EF4C4E5122023AC200B607C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF4C4E4F22023AC200B607C9 /* Main.storyboard */; };
 		EF4C4E5322023AC400B607C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF4C4E5222023AC400B607C9 /* Assets.xcassets */; };
@@ -17,6 +18,8 @@
 		EF4C4E8A220377C600B607C9 /* DocumentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4C4E89220377C600B607C9 /* DocumentsTableViewCell.swift */; };
 		EF4C4E8D220378FE00B607C9 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4C4E8C220378FE00B607C9 /* EditorViewController.swift */; };
 		EF4C4E8F2203891A00B607C9 /* document.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4C4E8E2203891A00B607C9 /* document.swift */; };
+		EF6E7A6B221BDCD7003E63AD /* Doc+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6E7A69221BDCD7003E63AD /* Doc+CoreDataClass.swift */; };
+		EF6E7A6C221BDCD7003E63AD /* Doc+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF6E7A6A221BDCD7003E63AD /* Doc+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EF3FC54D221B93E000C4FEB8 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		EF4C4E4822023AC200B607C9 /* Documents.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Documents.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF4C4E4B22023AC200B607C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF4C4E5022023AC200B607C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -53,6 +57,8 @@
 		EF4C4E89220377C600B607C9 /* DocumentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentsTableViewCell.swift; sourceTree = "<group>"; };
 		EF4C4E8C220378FE00B607C9 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
 		EF4C4E8E2203891A00B607C9 /* document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = document.swift; path = savedDocuments/document.swift; sourceTree = "<group>"; };
+		EF6E7A69221BDCD7003E63AD /* Doc+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Doc+CoreDataClass.swift"; sourceTree = "<group>"; };
+		EF6E7A6A221BDCD7003E63AD /* Doc+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Doc+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +109,8 @@
 		EF4C4E4A22023AC200B607C9 /* Documents */ = {
 			isa = PBXGroup;
 			children = (
+				EF6E7A69221BDCD7003E63AD /* Doc+CoreDataClass.swift */,
+				EF6E7A6A221BDCD7003E63AD /* Doc+CoreDataProperties.swift */,
 				EF4C4E4B22023AC200B607C9 /* AppDelegate.swift */,
 				EF4C4E4F22023AC200B607C9 /* Main.storyboard */,
 				EF4C4E5222023AC400B607C9 /* Assets.xcassets */,
@@ -112,6 +120,7 @@
 				EF4C4E872203710E00B607C9 /* DocumentsViewController.swift */,
 				EF4C4E89220377C600B607C9 /* DocumentsTableViewCell.swift */,
 				EF4C4E8C220378FE00B607C9 /* EditorViewController.swift */,
+				EF3FC54C221B93E000C4FEB8 /* Model.xcdatamodeld */,
 			);
 			path = Documents;
 			sourceTree = "<group>";
@@ -265,11 +274,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF6E7A6C221BDCD7003E63AD /* Doc+CoreDataProperties.swift in Sources */,
 				EF4C4E8A220377C600B607C9 /* DocumentsTableViewCell.swift in Sources */,
 				EF4C4E4C22023AC200B607C9 /* AppDelegate.swift in Sources */,
 				EF4C4E882203710E00B607C9 /* DocumentsViewController.swift in Sources */,
 				EF4C4E8D220378FE00B607C9 /* EditorViewController.swift in Sources */,
 				EF4C4E8F2203891A00B607C9 /* document.swift in Sources */,
+				EF6E7A6B221BDCD7003E63AD /* Doc+CoreDataClass.swift in Sources */,
+				EF3FC54E221B93E000C4FEB8 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,6 +610,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		EF3FC54C221B93E000C4FEB8 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				EF3FC54D221B93E000C4FEB8 /* Model.xcdatamodel */,
+			);
+			currentVersion = EF3FC54D221B93E000C4FEB8 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = EF4C4E4022023AC200B607C9 /* Project object */;
 }
